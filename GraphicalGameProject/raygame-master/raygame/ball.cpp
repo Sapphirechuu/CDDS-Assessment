@@ -1,124 +1,158 @@
 #include "ball.h"
-#include <iostream>
 
-void ball::paddleUpdate(float deltaTime, Rectangle playerRec, Rectangle botA, Rectangle botB, Rectangle botC)
+
+void ball::paddleUpdate(float deltaTime, player player)
 {
 	pos.x += speed.x * deltaTime;
 	pos.y += speed.y * deltaTime;
 
-	if (CheckCollisionCircleRec(pos, radius, playerRec))
+	if (CheckCollisionCircleRec(pos, radius, player.rec))
 	{
-		speed.x = (-speed.x);
-		speed.y = (rand() % 400) + 300;
-		if ((rand() % 2) == 1)
+		float angleInRadians = std::atan2(pos.x, pos.y);
+		float angleInDegrees = (angleInRadians / PI) * 180.0f;
+
+		pos.x += speed.x * cos(angleInDegrees * PI / 180);
+		pos.y += speed.y * sin(angleInDegrees * PI / 180);
+		if (pos.x < 0 || pos.x > GetScreenWidth())
 		{
-			speed.y = -speed.y;
+			angleInDegrees = 180 - angleInDegrees;
 		}
-		lastTouch = 1;
-	}
-	if (CheckCollisionCircleRec(pos, radius, botA))
-	{
-		speed.x = (-speed.x);
-		lastTouch = 2;
-	}
-	if (CheckCollisionCircleRec(pos, radius, botB))
-	{
-		speed.y = (-speed.y);
-		lastTouch = 3;
-	}
-	if (CheckCollisionCircleRec(pos, radius, botC))
-	{
-		speed.y = (-speed.y);
-		lastTouch = 4;
+		else if (pos.y < 0 || pos.y > GetScreenHeight())
+		{
+			angleInDegrees = 360 - angleInDegrees;
+		}
+		lastTouch = player.playerNum;
 	}
 }
 
-void ball::pickupUpdate(pickup pickups[], int screenHeight, int screenWidth, player& p1, player& p2, player& p3, player& p4)
+/*void ball::pickupUpdate(pickup pickups[], player& p1, player& p2, player& p3, player& p4)
 {
 	for (size_t i = 0; i < 5; i++)
 	{
+		
 		if (CheckCollisionCircles(pos, radius, pickups[i].pos, pickups[i].radius))
 		{
-			if (lastTouch == 1)
+            pickups[i].pos.x = rand() % GetScreenWidth();
+            pickups[i].pos.y = rand() % GetScreenHeight();
+
+			pickups->checkSpace(pickups, GetScreenHeight(), GetScreenWidth());
+
+            if (lastTouch == 1)
+            {
+                p1.score++;
+            }
+            else if (lastTouch == 2)
+            {
+                p2.score++;
+            }
+            else if (lastTouch == 3)
+            {
+                p3.score++;
+            }
+            else if (lastTouch == 4)
+            {
+                p4.score++;
+            }
+		}
+	}
+}*/
+
+void ball::wallUpdate(Rectangle topWall, Rectangle bottomWall, Rectangle leftWall, Rectangle rightWall, player players[])
+{
+	if (CheckCollisionCircleRec(pos, radius, leftWall) || CheckCollisionCircleRec(pos, radius, rightWall) || CheckCollisionCircleRec(pos, radius, topWall) || CheckCollisionCircleRec(pos, radius, bottomWall))
+	{
+		std::cout << "WALL" << std::endl;
+		for (size_t i = 0; i < 4; i++)
+		{
+			if (lastTouch == players[i].playerNum)
 			{
-				p1.score++;
-				pickups[i].pos.x = rand() % screenWidth;
-				pickups[i].pos.y = rand() % screenHeight;
-			}
-			else if (lastTouch == 2)
-			{
-				p2.score++;
-				pickups[i].pos.x = rand() % screenWidth;
-				pickups[i].pos.y = rand() % screenHeight;
-			}
-			else if (lastTouch == 3)
-			{
-				p3.score++;
-				pickups[i].pos.x = rand() % screenWidth;
-				pickups[i].pos.y = rand() % screenHeight;
-			}
-			else if (lastTouch == 4)
-			{
-				p4.score++;
-				pickups[i].pos.x = rand() % screenWidth;
-				pickups[i].pos.y = rand() % screenHeight;
+				players[i].score++;
+				lastTouch = 0;
 			}
 		}
+		pos.x = GetScreenWidth() / 2;
+		pos.y = GetScreenHeight() / 2;
+	}
+
+	if (pos.x < 0 || pos.x > GetScreenWidth() || pos.y < 0 || pos.y > GetScreenHeight())
+	{
+		pos.x = GetScreenWidth() / 2;
+		pos.y = GetScreenHeight() / 2;
 	}
 }
 
-void ball::wallUpdate(Rectangle topWall, Rectangle bottomWall, Rectangle leftWall, Rectangle rightWall, int screenHeight, int screenWidth, player& p1, player& p2, player& p3, player& p4)
+/*void ball::paddleMovement(float deltaTime, player & p2, player & p3, player & p4)
 {
-	if (CheckCollisionCircleRec(pos, radius, leftWall) || CheckCollisionCircleRec(pos, radius, rightWall))
+	if (!p2.isPlayer && p2.isHorizon)
 	{
+		if (pos.x > p2.rec.x)
+		{
+			p2.rec.x += p2.speed * deltaTime;
+		}
+		if (pos.x < p2.rec.x)
+		{
+			p2.rec.x -= p2.speed * deltaTime;
+		}
+	}
+	else if (!p2.isPlayer && !p2.isHorizon)
+	{
+		if (pos.y > p2.rec.y)
+		{
+			p2.rec.y += p2.speed * deltaTime;
+		}
+		if (pos.y < p2.rec.y)
+		{
+			p2.rec.y -= p2.speed * deltaTime;
+		}
+	}
+
+	if (!p3.isPlayer && p3.isHorizon)
+	{
+		if (pos.x > p3.rec.x)
+		{
+			p3.rec.x += p3.speed * deltaTime;
+		}
+		if (pos.x < p3.rec.x)
+		{
+			p3.rec.x -= p3.speed * deltaTime;
+		}
+	}
+	else if(!p3.isPlayer && !p3.isHorizon)
+	{
+		if (pos.y > p3.rec.y)
+		{
+			p3.rec.y += p3.speed * deltaTime;
+		}
+		if (pos.y < p3.rec.y)
+		{
+			p3.rec.y -= p3.speed * deltaTime;
+		}
+	}
+
+	if (!p4.isPlayer && p4.isHorizon)
+	{
+		if (pos.x > p4.rec.x)
+		{
+			p4.rec.x += p4.speed * deltaTime;
+		}
+		if (pos.x < p4.rec.x)
+		{
+			p4.rec.x -= p4.speed * deltaTime;
+		}
 		
-		if (lastTouch == 1)
-		{
-			p1.score++;
-			lastTouch = 0;
-		}
-		else if (lastTouch == 2)
-		{
-			p2.score++;
-			lastTouch = 0;
-		}
-		else if (lastTouch == 3)
-		{
-			p3.score++;
-			lastTouch = 0;
-		}
-		else if (lastTouch == 4)
-		{
-			p4.score++;
-			lastTouch = 0;
-		}
-		pos.x = screenWidth / 2;
 	}
-	else if (CheckCollisionCircleRec(pos, radius, topWall) || CheckCollisionCircleRec(pos, radius, bottomWall))
+	else if (!p4.isPlayer && !p4.isHorizon)
 	{
-		if (lastTouch == 1)
+		if (pos.y > p4.rec.y)
 		{
-			p1.score++;
-			lastTouch = 0;
+			p4.rec.y += p4.speed * deltaTime;
 		}
-		else if (lastTouch == 2)
+		if (pos.y < p4.rec.y)
 		{
-			p2.score++;
-			lastTouch = 0;
+			p4.rec.y -= p4.speed * deltaTime;
 		}
-		else if (lastTouch == 3)
-		{
-			p3.score++;
-			lastTouch = 0;
-		}
-		else if (lastTouch == 4)
-		{
-			p4.score++;
-			lastTouch = 0;
-		}
-		pos.y = screenHeight / 2;
 	}
-}
+}*/
 
 void ball::draw()
 {

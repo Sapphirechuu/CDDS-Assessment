@@ -1,8 +1,9 @@
 #pragma once
 
 #include "raylib.h"
-#include "pickups.h"
+//#include "pickups.h"
 #include "player.h"
+#include <iostream>
 
 class ball
 {
@@ -14,8 +15,9 @@ public:
 
 	int lastTouch;
 
-	void paddleUpdate(float deltaTime, Rectangle playerRec, Rectangle botA, Rectangle botB, Rectangle botC);
-	void pickupUpdate(pickup pickups[], int screenHeight, int screenWidth, player& p1, player& p2, player& p3, player& p4);
-	void wallUpdate(Rectangle topWall, Rectangle bottomWall, Rectangle leftWall, Rectangle rightWall, int screenHeight, int screenWidth, player& p1, player& p2, player& p3, player& p4);
+	void paddleUpdate(float deltaTime, player player);
+	//void pickupUpdate(pickup pickups[], player& p1, player& p2, player& p3, player& p4);
+	void wallUpdate(Rectangle topWall, Rectangle bottomWall, Rectangle leftWall, Rectangle rightWall, player players[]);
+	//void paddleMovement(float deltaTime, player& p2, player& p3, player& p4);
 	void draw();
 };

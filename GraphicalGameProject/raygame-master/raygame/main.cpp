@@ -13,6 +13,7 @@
 #include "player.h"
 #include "ball.h"
 #include "pickups.h"
+#include "bots.h"
 
 #include <iostream>
 #include <ctime>
@@ -25,7 +26,7 @@ int main()
 	int screenWidth = 800;
 	int screenHeight = 800;
 
-	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+	InitWindow(screenWidth, screenHeight, "A-Pong");
 
 	SetTargetFPS(60);
 
@@ -37,49 +38,45 @@ int main()
 
 	
 	// Initialize players and player Rectangles (user)
-	player player1;
-	player1.isPlayer = true;
-	player1.rec = { 25, ((float)screenHeight / 2), 20.0f, 80.0f };
-	player1.recColor = GREEN;
-
-	player botA;
-	botA.isPlayer = false;
-	botA.rec = { (float)screenWidth - 40.0f, (float)screenHeight / 2.0f, 20.0f, 80.0f};
-	botA.recColor = RED;
-
-	player botB;
-	botB.isPlayer = false;
-	botB.rec = { (float)screenWidth / 2.0f, (float)screenHeight - 40.0f, 80.0f, 20.0f };
-	botB.recColor = BLUE;
-
-	player botC;
-	botC.isPlayer = false;
-	botC.rec = { (float)screenWidth / 2.0f, 25, 80.0f, 20.0f };
-	botC.recColor = YELLOW;
+	player players[4]
+	{
+		{ { 25, ((float)screenHeight / 2), 20.0f, 80.0f }, true, false, 1, GREEN},
+		{ { (float)screenWidth / 2.0f, (float)screenHeight - 40.0f, 80.0f, 20.0f }, false, true, 2, RED},
+		{ { (float)screenWidth - 40.0f, (float)screenHeight / 2.0f, 20.0f, 80.0f }, false, false, 3, BLUE},
+		{ { (float)screenWidth / 2.0f, 25, 80.0f, 20.0f }, false, true, 4, YELLOW}
+	};
 
 	// Initialize Game ball
-	ball ball {	{ (float)screenWidth / 2, (float)screenHeight / 2 }, 15.f, 300.0f, 30.0f	};
+	ball ball {	{ (float)screenWidth / 2, (float)screenHeight / 2 }, 15.0f, 100.0f, 90.0f};
 
 	// Initialize Pickups
 	pickup pickups[5] =
 	{
-		{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 },
+	{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 },
 	{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 },
 	{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 },
 	{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 },
 	{ { rand() % screenWidth, rand() % screenHeight }, 8.0f, 1 }
 	};
+	pickups->checkSpace(pickups);
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
 		// Update
-		player1.update(GetFrameTime());
-		ball.paddleUpdate(GetFrameTime(), player1.rec, botA.rec, botB.rec, botC.rec);
-		ball.pickupUpdate(pickups, screenHeight, screenWidth, player1, botA, botB, botC);
-		ball.wallUpdate(topWall, bottomWall, leftWall, rightWall, screenHeight, screenWidth, player1, botA, botB, botC);
+		for (size_t i = 0; i < 4; i++)
+		{
+			paddleMovement(GetFrameTime(), players, ball);
+			ball.paddleUpdate(GetFrameTime(), players[i]);
+		}
+		pickups->pickupUpdate(pickups, players, ball);
+		ball.wallUpdate(topWall, bottomWall, leftWall, rightWall, players);
+		//ball.paddleMovement(GetFrameTime(), botA, botB, botC);
 		
-
+		std::string playerScore = "Player 1 : " + std::to_string(players[0].score);
+		std::string botAScore = "Player 2 : " + std::to_string(players[1].score);
+		std::string botBScore = "Player 3 : " + std::to_string(players[2].score);
+		std::string botCScore = "Player 4 : " + std::to_string(players[3].score);
 		// Draw
 		BeginDrawing();
 
@@ -91,22 +88,24 @@ int main()
 		DrawRectangleRec(leftWall, PINK);
 		DrawRectangleRec(rightWall, PINK);
 
-		// Draw Objects
+		// Draw Pickups
 		for (size_t i = 0; i < 5; i++)
 		{
 			pickups[i].draw();
 		}
-		player1.draw();
-		botA.draw();
-		botB.draw();
-		botC.draw();
 
+		// Draw Game Objects
+		for (size_t i = 0; i < 4; i++)
+		{
+			players[i].draw();
+		}
 		ball.draw();
 
-		DrawText(std::to_string(player1.score).c_str(), 5, 5, 25, GREEN);
-		DrawText(std::to_string(botA.score).c_str(), 35, 5, 25, RED);
-		DrawText(std::to_string(botB.score).c_str(), 60, 5, 25, BLUE);
-		DrawText(std::to_string(botC.score).c_str(), 85, 5, 25, YELLOW);
+		// Draw Text
+		DrawText(playerScore.c_str(), 5, 5, 25, players[0].recColor);
+		DrawText(botAScore.c_str(), screenWidth - MeasureText(botAScore.c_str(), 25), 5, 25, players[1].recColor);
+		DrawText(botBScore.c_str(), 5, screenHeight - 35, 25, players[2].recColor);
+		DrawText(botCScore.c_str(), screenWidth - 150, screenHeight - 35, 25, players[3].recColor);
 
 		// End Drawing
 		EndDrawing();
