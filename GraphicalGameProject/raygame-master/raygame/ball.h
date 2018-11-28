@@ -16,8 +16,6 @@ public:
 	int lastTouch;
 
 	void paddleUpdate(float deltaTime, player player);
-	//void pickupUpdate(pickup pickups[], player& p1, player& p2, player& p3, player& p4);
 	void wallUpdate(Rectangle topWall, Rectangle bottomWall, Rectangle leftWall, Rectangle rightWall, player players[]);
-	//void paddleMovement(float deltaTime, player& p2, player& p3, player& p4);
 	void draw();
 };

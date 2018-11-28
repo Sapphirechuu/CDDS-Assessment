@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="bots.cpp" />
+    <ClCompile Include="gameState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pickups.cpp" />
     <ClCompile Include="player.cpp" />
@@ -140,8 +141,13 @@
   <ItemGroup>
     <ClInclude Include="ball.h" />
     <ClInclude Include="bots.h" />
+    <ClInclude Include="endstate.h" />
+    <ClInclude Include="gameState.h" />
+    <ClInclude Include="menustate.h" />
     <ClInclude Include="pickups.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="pongstate.h" />
+    <ClInclude Include="splashstate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,6 +30,9 @@
     <ClCompile Include="bots.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -42,6 +45,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bots.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menustate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pongstate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="splashstate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="endstate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
