@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 #include "player.h"
 #include "ball.h"
@@ -24,6 +25,7 @@ public:
 	float timer = 0.0f;
 	float timeLimit = 25.0f;
 	float endTimer = 0.0f;
+	bool scoresAdded = false;
 
 
 	// Initialize Walls
@@ -146,16 +148,29 @@ public:
 			if (players[0].score > players[1].score && players[0].score > players[2].score && players[0].score > players[3].score)
 			{
 				DrawText((player1Win).c_str(), screenWidth / 2 - (MeasureText((player1Win).c_str(), 30) / 2), screenHeight / 2 + 50, 30, WHITE);
-				std::fstream file;
-				file.open("Highscores.bin", std::ios::out | std::ios::binary);
-
-				if (!file.is_open())
+				/*if (!scoresAdded)
 				{
-					std::cout << "Failed." << std::endl;
-				}
-				file << players[0].score << std::endl;
-				file.flush();
-				file.close();
+					std::fstream file;
+					file.open("Highscores.bin", std::ios_base::in | std::ios::binary);
+					if (!file.is_open()) {
+						std::cout << "Failed." << std::endl;
+					}
+
+					for (int i = 0; i < 10; ++i)
+					{
+						std::string buffer;
+						std::getline(file, buffer);
+
+						std::stringstream temp(buffer);
+						temp >> leaderboard[i].score;
+
+						std::getline(file, buffer);
+
+						file.clear();
+						file.close();
+						scoresAdded = true;
+					}
+				}*/
 			}
 			else if (players[1].score > players[0].score && players[1].score > players[2].score && players[1].score > players[3].score)
 			{
@@ -172,7 +187,6 @@ public:
 			else
 			{
 				DrawText("It's a tie!", screenWidth / 2 - 75, screenHeight / 2 + 50, 30, WHITE);
-				std::cout << "tie" << std::endl;
 			}
 
 			endTimer += GetFrameTime();

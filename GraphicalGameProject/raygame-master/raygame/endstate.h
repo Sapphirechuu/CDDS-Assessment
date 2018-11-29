@@ -39,22 +39,24 @@ public:
 		if (GetMousePosition().x >= exitButton.x && GetMousePosition().x <= exitButton.x + width && GetMousePosition().y >= exitButton.y && GetMousePosition().y <= exitButton.y + height)
 		{
 			readyForNext = IsMouseButtonDown(0) || readyForNext;
-			nextState = SPLASH;
+			nextState = NONE;
 		}
-		
-		std::fstream file;
+		/*std::fstream file;
 		file.open("Highscores.bin", std::ios_base::in | std::ios::binary);
 		if (!file.is_open()) {
 			std::cout << "Failed." << std::endl;
 		}
-		std::string buffer;
-		while (getline(file, buffer))
+		int good = 0;
+		while (good = !10)
 		{
-			DrawText(buffer.c_str(), GetScreenWidth() / 2, GetScreenHeight() / 2, 30, SKYBLUE);
+			int temp;
+			good = 0;
+			for (int i = 0; i < 10; ++i)
+			{
+				if(leaderboard[i])
+			}
 		}
-		file.clear();
-		file.close();
-		scoreAdded = true;
+		DrawText(buffer.c_str(), GetScreenWidth() / 2, GetScreenHeight() / 2, 30, SKYBLUE);*/
 	}
 
 	virtual void draw()
@@ -67,7 +69,7 @@ public:
 		DrawText("Start Game", gameButton.x + width / 2 - MeasureText("Start Game", fontSize) / 2, gameButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Menu", menuButton.x + width / 2 - MeasureText("Menu", fontSize) / 2, menuButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Exit", exitButton.x + width / 2 - MeasureText("Exit", fontSize) / 2, exitButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
-		
+		DrawText("The score menu is currently under maintenance. Thank you for you patience.", GetScreenWidth() / 2 - MeasureText("The score menu is currently under maintenance. Thank you for you patience.", 18) / 2 , GetScreenHeight() / 2 - fontSize / 2 , 18, RED);
 		
 	}
 

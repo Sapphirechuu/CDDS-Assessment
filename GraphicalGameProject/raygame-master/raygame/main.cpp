@@ -42,6 +42,11 @@ int main()
 
 			setupGameState(stateInstance, nextState);
 			currentState = nextState;
+
+			if (currentState == NONE)
+			{
+				break;
+			}
 			continue;
 		}
 		// Draw

@@ -9,6 +9,7 @@ class splashstate : public gamestate
 	float timeLimit;
 
 public:
+	Font splashFont = LoadFont("barcade.ttf");
 	splashstate()
 	{
 		duration = 0.0f;
@@ -22,11 +23,12 @@ public:
 
 	virtual void draw()
 	{
-		const int fontSize = 40;
+		const int fontSize = 60;
 
-		int xPos = GetScreenWidth() / 2 - MeasureText("Sapphire Games", fontSize) / 2;
-		int yPos = GetScreenHeight() / 2 - fontSize / 2;
-		DrawText("Sapphire Games", xPos, yPos, fontSize, DARKBLUE);
+		float xPos = GetScreenWidth() / 2 - (MeasureTextEx(splashFont, "Sapphire Games", fontSize, 0).x)/2;
+		float yPos = GetScreenHeight() / 2 - fontSize / 2;
+		//DrawText("Sapphire Games", xPos, yPos, fontSize, DARKBLUE);
+		DrawTextEx(splashFont, "Sapphire Games", { xPos, yPos }, fontSize, 0, DARKBLUE);
 	}
 
 	virtual GameStates next()

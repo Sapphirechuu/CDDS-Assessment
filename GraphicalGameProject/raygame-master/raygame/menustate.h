@@ -36,7 +36,7 @@ public:
 		if (GetMousePosition().x >= exitButton.x && GetMousePosition().x <= exitButton.x + width && GetMousePosition().y >= exitButton.y && GetMousePosition().y <= exitButton.y + height)
 		{
 			readyForNext = IsMouseButtonDown(0) || readyForNext;
-			nextState = SPLASH;
+			nextState = NONE;
 		}
 	}
 

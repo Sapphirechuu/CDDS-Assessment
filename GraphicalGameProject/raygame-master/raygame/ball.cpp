@@ -8,15 +8,18 @@ void ball::paddleUpdate(float deltaTime, player player)
 
 	if (CheckCollisionCircleRec(pos, radius, player.rec))
 	{
-		if (player.isHorizon)
+		if (lastTouch != player.playerNum)
 		{
-			speed.y = -speed.y;
+			if (player.isHorizon)
+			{
+				speed.y = -speed.y;
+			}
+			if (!player.isHorizon)
+			{
+				speed.x = -speed.x;
+			}
+			lastTouch = player.playerNum;
 		}
-		if (!player.isHorizon)
-		{
-			speed.x = -speed.x;
-		}
-		lastTouch = player.playerNum;
 	}
 }
 
