@@ -12,22 +12,22 @@ void paddleMovement(float deltaTime, player players[], ball ball)
 		{
 			if (!players[i].isPlayer && players[i].isHorizon)
 			{
-				if (ball.pos.x > players[i].rec.x)
+				if (ball.pos.x > players[i].rec.x + (players[i].rec.width/2))
 				{
 					players[i].rec.x += players[i].speed * deltaTime;
 				}
-				if (ball.pos.x < players[i].rec.x)
+				if (ball.pos.x < players[i].rec.x + (players[i].rec.width / 2))
 				{
 					players[i].rec.x -= players[i].speed * deltaTime;
 				}
 			}
 			else if (!players[i].isPlayer && !players[i].isHorizon)
 			{
-				if (ball.pos.y > players[i].rec.y)
+				if (ball.pos.y > players[i].rec.y + (players[i].rec.height / 2))
 				{
 					players[i].rec.y += players[i].speed * deltaTime;
 				}
-				if (ball.pos.y < players[i].rec.y)
+				if (ball.pos.y < players[i].rec.y + (players[i].rec.height / 2))
 				{
 					players[i].rec.y -= players[i].speed * deltaTime;
 				}

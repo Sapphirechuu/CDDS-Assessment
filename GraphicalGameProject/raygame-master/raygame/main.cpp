@@ -10,10 +10,6 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "player.h"
-#include "ball.h"
-#include "pickups.h"
-#include "bots.h"
 #include "splashstate.h"
 
 #include <iostream>
@@ -34,8 +30,6 @@ int main()
 	gamestate * stateInstance = new splashstate();
 	GameStates currentState = SPLASH;
 
-
-
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
@@ -50,15 +44,12 @@ int main()
 			currentState = nextState;
 			continue;
 		}
-		//stateInstance->update();
 		// Draw
 		BeginDrawing();
 
 		ClearBackground(BLACK);
 
 		stateInstance->draw();
-		// Draw Walls
-
 
 		// End Drawing
 		EndDrawing();

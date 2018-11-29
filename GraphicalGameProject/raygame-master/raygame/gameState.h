@@ -15,7 +15,6 @@ class gamestate
 {
 public:
 	virtual void tick(float deltaTime) {};
-	//virtual void update() {};
 	virtual void draw() {};
 	virtual GameStates next() { return NONE; };
 };

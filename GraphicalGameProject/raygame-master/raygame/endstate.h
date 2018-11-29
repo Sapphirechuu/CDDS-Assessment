@@ -1,5 +1,8 @@
 #pragma once
 #include "gamestate.h"
+#include <filesystem>
+#include <iostream>
+#include <fstream>
 
 class endstate : public gamestate
 {
@@ -9,9 +12,11 @@ class endstate : public gamestate
 public:
 	float width = (float)GetScreenWidth() / 4;
 	float height = 60;
+	bool scoreAdded = false;
 	Rectangle gameButton{ (float)GetScreenWidth() / 2 - 250 - width / 2, (float)GetScreenHeight() / 2 + 300 - height / 2, width, height };
 	Rectangle menuButton{ (float)GetScreenWidth() / 2 - width / 2, (float)GetScreenHeight() / 2 + 300 - height / 2, width, height };
 	Rectangle exitButton{ (float)GetScreenWidth() / 2 + 250 - width / 2, (float)GetScreenHeight() / 2 + 300 - height / 2, width, height };
+
 	endstate()
 	{
 		readyForNext = false;
@@ -36,6 +41,20 @@ public:
 			readyForNext = IsMouseButtonDown(0) || readyForNext;
 			nextState = SPLASH;
 		}
+		
+		std::fstream file;
+		file.open("Highscores.bin", std::ios_base::in | std::ios::binary);
+		if (!file.is_open()) {
+			std::cout << "Failed." << std::endl;
+		}
+		std::string buffer;
+		while (getline(file, buffer))
+		{
+			DrawText(buffer.c_str(), GetScreenWidth() / 2, GetScreenHeight() / 2, 30, SKYBLUE);
+		}
+		file.clear();
+		file.close();
+		scoreAdded = true;
 	}
 
 	virtual void draw()
@@ -48,6 +67,8 @@ public:
 		DrawText("Start Game", gameButton.x + width / 2 - MeasureText("Start Game", fontSize) / 2, gameButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Menu", menuButton.x + width / 2 - MeasureText("Menu", fontSize) / 2, menuButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Exit", exitButton.x + width / 2 - MeasureText("Exit", fontSize) / 2, exitButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
+		
+		
 	}
 
 	virtual GameStates next()

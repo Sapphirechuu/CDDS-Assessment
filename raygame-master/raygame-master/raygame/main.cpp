@@ -81,7 +81,7 @@ int fakemain()
 
 			player.update(GetFrameTime());*/
 
-		if (timer <= 300)
+		if (timer <= 10)
 		{
 			if (IsKeyDown(KEY_W))
 			{
@@ -224,7 +224,7 @@ int fakemain()
 
 		ClearBackground(BLACK);
 
-		if (timer < 300)
+		if (timer < 10)
 		{
 			for (size_t i = 0; i < 5; i++)
 			{
@@ -244,9 +244,9 @@ int fakemain()
 			DrawText(std::to_string(timer).c_str(), screenWidth / 2 - 60, 10, 25, RED);
 		}
 
-		if (timer > 300)
+		if (timer > 10)
 		{
-			timer = 300;
+			timer = 10;
 			DrawText(("Time's Up! " + gameOver).c_str(), screenWidth/2 - 200, screenHeight/2, 40, WHITE);
 			DrawText("Press BACKSPACE to restart or ESC to exit", 5, screenHeight - 30, 30, RED);
 			if (player1Score > player2Score)

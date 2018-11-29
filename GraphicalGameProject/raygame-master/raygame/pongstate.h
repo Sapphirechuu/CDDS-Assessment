@@ -1,5 +1,10 @@
 #pragma once
+
+#include <iostream>
 #include <string>
+#include <filesystem>
+#include <fstream>
+
 #include "player.h"
 #include "ball.h"
 #include "pickups.h"
@@ -11,11 +16,14 @@ class pongstate : public gamestate
 {
 
 	bool clicked;
-	// Initialize Pickups
+	
 public:
 
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
+	float timer = 0.0f;
+	float timeLimit = 25.0f;
+	float endTimer = 0.0f;
 
 
 	// Initialize Walls
@@ -43,6 +51,13 @@ public:
 	std::string botBScore = "Player 3 : " + std::to_string(players[2].score);
 	std::string botCScore = "Player 4 : " + std::to_string(players[3].score);
 
+	std::string gameOver;
+	std::string player1Win;
+	std::string player2Win;
+	std::string player3Win;
+	std::string player4Win;
+
+	// Initialize Pickups
 	float posax = rand() % screenWidth;
 	float posay = rand() % screenHeight;
 	float posbx = rand() % screenWidth;
@@ -69,27 +84,35 @@ public:
 
 	virtual void tick(float deltaTime)
 	{
-		pickups->checkSpace(pickups);
-		for (size_t i = 0; i < 4; i++)
-		{
-			paddleMovement(deltaTime, players, ball);
-			ball.paddleUpdate(deltaTime, players[i]);
-		}
-		pickups->pickupUpdate(pickups, players, ball);
-		ball.wallUpdate(topWall, bottomWall, leftWall, rightWall, players);
-		//ball.paddleMovement(GetFrameTime(), botA, botB, botC);
+		timer += GetFrameTime();
 
-		playerScore = "Player 1 : " + std::to_string(players[0].score);
-		botAScore = "Player 2 : " + std::to_string(players[1].score);
-		botBScore = "Player 3 : " + std::to_string(players[2].score);
-		botCScore = "Player 4 : " + std::to_string(players[3].score);
+		if (timer < timeLimit)
+		{
+			pickups->checkSpace(pickups);
+			for (size_t i = 0; i < 4; i++)
+			{
+				paddleMovement(deltaTime, players, ball);
+				ball.paddleUpdate(deltaTime, players[i]);
+			}
+			pickups->pickupUpdate(pickups, players, ball);
+			ball.wallUpdate(topWall, bottomWall, leftWall, rightWall, players);
+			//ball.paddleMovement(GetFrameTime(), botA, botB, botC);
+
+			playerScore = "Player 1 : " + std::to_string(players[0].score);
+			botAScore = "Player 2 : " + std::to_string(players[1].score);
+			botBScore = "Player 3 : " + std::to_string(players[2].score);
+			botCScore = "Player 4 : " + std::to_string(players[3].score);
+		}
+		gameOver = "Game over!";
+		player1Win = "Winner! " + playerScore + " points!";
+		player2Win = "Winner! " + botAScore + " points!";
+		player3Win = "Winner!  " + botBScore + " points!";
+		player4Win = "Winner!  " + botCScore + " points!";
 	}
 
 	virtual void draw()
 	{
-		const int fontSize = 32;
-
-		if (!clicked)
+		if (timer < timeLimit)
 		{
 			DrawRectangleRec(topWall, PINK);
 			DrawRectangleRec(bottomWall, PINK);
@@ -114,12 +137,50 @@ public:
 			DrawText(botAScore.c_str(), screenWidth - MeasureText(botAScore.c_str(), 25) - 5, 5, 25, players[1].recColor);
 			DrawText(botBScore.c_str(), 5, screenHeight - 35, 25, players[2].recColor);
 			DrawText(botCScore.c_str(), screenWidth - MeasureText(botCScore.c_str(), 25) - 5, screenHeight - 35, 25, players[3].recColor);
+			DrawText(std::to_string(timer).c_str(), screenWidth / 2 - 60, 10, 25, RED);
 		}
-		else
+		if (timer > timeLimit)
 		{
-			
-		}
+			timer = timeLimit;
+			DrawText(("Time's Up! " + gameOver).c_str(), screenWidth / 2 - (MeasureText(("Time's Up! " + gameOver).c_str(), 40) / 2), screenHeight / 2, 40, WHITE);
+			if (players[0].score > players[1].score && players[0].score > players[2].score && players[0].score > players[3].score)
+			{
+				DrawText((player1Win).c_str(), screenWidth / 2 - (MeasureText((player1Win).c_str(), 30) / 2), screenHeight / 2 + 50, 30, WHITE);
+				std::fstream file;
+				file.open("Highscores.bin", std::ios::out | std::ios::binary);
 
+				if (!file.is_open())
+				{
+					std::cout << "Failed." << std::endl;
+				}
+				file << players[0].score << std::endl;
+				file.flush();
+				file.close();
+			}
+			else if (players[1].score > players[0].score && players[1].score > players[2].score && players[1].score > players[3].score)
+			{
+				DrawText((player2Win).c_str(), screenWidth / 2 - (MeasureText((player2Win).c_str(), 30) / 2), screenHeight / 2 + 50, 30, WHITE);
+			}
+			else if (players[3].score > players[0].score && players[2].score > players[1].score && players[2].score > players[3].score)
+			{
+				DrawText((player3Win).c_str(), screenWidth / 2 - (MeasureText((player3Win).c_str(), 30) / 2), screenHeight / 2 + 50, 30, WHITE);
+			}
+			else if (players[3].score > players[0].score && players[3].score > players[1].score && players[3].score > players[2].score)
+			{
+				DrawText((player4Win).c_str(), screenWidth / 2 - (MeasureText((player4Win).c_str(), 30) / 2), screenHeight / 2 + 50, 30, WHITE);
+			}
+			else
+			{
+				DrawText("It's a tie!", screenWidth / 2 - 75, screenHeight / 2 + 50, 30, WHITE);
+				std::cout << "tie" << std::endl;
+			}
+
+			endTimer += GetFrameTime();
+			if (endTimer > 6.0f)
+			{
+				clicked = true;
+			}
+		}
 		clicked = IsMouseButtonPressed(1) || clicked;
 	}
 
