@@ -17,6 +17,13 @@ public:
 	Rectangle menuButton{ (float)GetScreenWidth() / 2 - width / 2, (float)GetScreenHeight() / 2 + 300 - height / 2, width, height };
 	Rectangle exitButton{ (float)GetScreenWidth() / 2 + 250 - width / 2, (float)GetScreenHeight() / 2 + 300 - height / 2, width, height };
 
+	Texture2D butterfly[6];
+	int currentFrame = 0;
+	float timer = 0;
+	bool texturesLoaded = false;
+
+	
+
 	endstate()
 	{
 		readyForNext = false;
@@ -41,6 +48,30 @@ public:
 			readyForNext = IsMouseButtonDown(0) || readyForNext;
 			nextState = NONE;
 		}
+
+		if (!texturesLoaded)
+		{
+			butterfly[0] = LoadTexture("Textures/Butterfly-1.png");
+			butterfly[1] = LoadTexture("Textures/Butterfly-2.png");
+			butterfly[2] = LoadTexture("Textures/Butterfly-3.png");
+			butterfly[3] = LoadTexture("Textures/Butterfly-4.png");
+			butterfly[4] = LoadTexture("Textures/Butterfly-5.png");
+			butterfly[5] = LoadTexture("Textures/Butterfly-6.png");
+			texturesLoaded = true;
+		}
+
+		timer += deltaTime;
+		if (timer > 0.2f)
+		{
+			currentFrame++;
+			timer = 0.0f;
+			if (currentFrame == 6)
+			{
+				currentFrame = 0;
+			}
+		}
+
+		//Leaderboard stuff that is under maintenance
 		/*std::fstream file;
 		file.open("Highscores.bin", std::ios_base::in | std::ios::binary);
 		if (!file.is_open()) {
@@ -63,13 +94,14 @@ public:
 	{
 		const int fontSize = 35;
 
+		DrawTexture(butterfly[currentFrame], GetScreenWidth()/2 - butterfly[currentFrame].width/2, GetScreenHeight()/2 - butterfly[currentFrame].height/2, WHITE);
 		DrawRectangleRec(gameButton, BLUE);
 		DrawRectangleRec(menuButton, BLUE);
 		DrawRectangleRec(exitButton, BLUE);
 		DrawText("Start Game", gameButton.x + width / 2 - MeasureText("Start Game", fontSize) / 2, gameButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Menu", menuButton.x + width / 2 - MeasureText("Menu", fontSize) / 2, menuButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
 		DrawText("Exit", exitButton.x + width / 2 - MeasureText("Exit", fontSize) / 2, exitButton.y + height / 2 - fontSize / 2, fontSize, WHITE);
-		DrawText("The score menu is currently under maintenance. Thank you for you patience.", GetScreenWidth() / 2 - MeasureText("The score menu is currently under maintenance. Thank you for you patience.", 18) / 2 , GetScreenHeight() / 2 - fontSize / 2 , 18, RED);
+		DrawText("The score menu is currently under maintenance. Thank you for you patience.", GetScreenWidth() / 2 - MeasureText("The score menu is currently under maintenance. Thank you for you patience.", 18) / 2 , (GetScreenHeight() / 2) - (fontSize / 2 ) + 90, 18, RED);
 		
 	}
 
