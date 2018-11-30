@@ -1,5 +1,38 @@
 # Code Design Data Structures
 ## Assessments
 - Graphical Game Project (A-pong)
+    - Skills Used:
+        - Rendering Capabilities
+        - A graphical User Interface
+        - Use of an asset from disk
+        - Input checking and response
+    - Assessment pieces included:
+        - Graphical Game Project
 - Merge Sort Excercise
-- Raylib game (Exciting Pong)
+    - Skills Used:
+        - Implement a Bubble sort
+        - Implement a Merge Sort
+        - Sorting High Score table
+    - Assessment pieces included:
+        - Merge Sort
+        - Bubble Sort
+- Custom Containers Exercise
+    - Skills Used:
+        - Vector
+        - Queue
+        - Stack
+        - Object Pool
+        - Linked List
+            - Remove Function
+    - Assessment pieces included:
+        - Vector
+        - Queue
+        - Stack
+        - Object Pool
+        - Linked List
+- Raylib Game (Exciting Pong)
+    - Skills used:
+        - Play with Raylib
+    - Assesment pieces included:
+        - None, this is not part of the Assessment
+        - This is the first Version of Raylib pong
