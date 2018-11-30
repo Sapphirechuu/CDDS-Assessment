@@ -11,6 +11,10 @@
 
 #include "raylib.h"
 #include "tVector.h"
+#include "tQueue.h"
+#include "tStack.h"
+#include "tObjectPool.h"
+#include "tLinkedList.h"
 #include <iostream>
 
 int main()
@@ -32,20 +36,30 @@ int main()
 	bottomlessNums.pop_back();
 
 	bottomlessNums.push_back(25);
+
 	for (size_t i = 0; i < bottomlessNums.size(); ++i)
 	{
 		std::cout << bottomlessNums.at(i) << std::endl;
 	}
+
+	tForwardList<int> link;
+	link.push_front(8);
+	link.push_front(8);
+	link.push_front(9);
+	link.push_front(8);
+	link.push_front(9);
+	link.push_front(9);
+	link.push_front(8);
+	link.push_front(5);
+	link.push_front(8);
+
+	link.remove(8);
+	link.display();
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
-		// Update
-		//----------------------------------------------------------------------------------
-		// TODO: Update your variables here
-		//----------------------------------------------------------------------------------
-
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();

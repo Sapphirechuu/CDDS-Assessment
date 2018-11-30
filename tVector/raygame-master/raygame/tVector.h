@@ -34,7 +34,6 @@ public:
 	tVector& operator = (const tVector &rhs);
 
 	T& operator[] (size_t index);*/
-
 	
 };
 

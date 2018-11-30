@@ -134,6 +134,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tLinkedList.h" />
+    <ClInclude Include="tObjectPool.h" />
     <ClInclude Include="tQueue.h" />
     <ClInclude Include="tStack.h" />
     <ClInclude Include="tVector.h" />
