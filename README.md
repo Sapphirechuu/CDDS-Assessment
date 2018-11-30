@@ -8,7 +8,7 @@
         - Input checking and response
     - Assessment pieces included:
         - Graphical Game Project
-- Merge Sort Excercise
+- Sorting
     - Skills Used:
         - Implement a Bubble sort
         - Implement a Merge Sort
