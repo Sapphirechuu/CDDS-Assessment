@@ -24,7 +24,28 @@ public:
 	void remove(const T& val);      // removes all elements equal to the given value
 
 	void display();
+
+	class iterator
+	{
+		Node * cur;                                 // current node being operated upon
+
+	public:
+		iterator();                                 // initializes an empty iterator pointing to null
+		iterator(Node * startNode);                 // initializes an iterator pointing to the given node
+
+		bool operator==(const iterator& rhs) const; // returns true if the iterator points to the same node
+		bool operator!=(const iterator& rhs) const; // returns false if the iterator does not point to the same node
+		T& operator*() const;                       // returns a reference to the element pointed to by the current node
+		iterator& operator++();                     // pre-increment (returns a reference to this iterator after it is incremented)
+		iterator operator++(int);                   // post-increment (returns an iterator to current node while incrementing the existing iterator)
+		
+	};
+	iterator begin();
+	iterator end();
+
 };
+
+
 
 template<typename T>
 tForwardList<T>::tForwardList()
@@ -36,6 +57,10 @@ tForwardList<T>::tForwardList()
 template<typename T>
 tForwardList<T>::~tForwardList()
 {
+	while (head != NULL)
+	{
+		pop_front();
+	}
 	delete head;
 	delete tail;
 }
@@ -77,35 +102,38 @@ T & tForwardList<T>::front()
 template<typename T>
 const T & tForwardList<T>::front() const
 {
-	return head.data;
+	return head->data;
 }
 
 template<typename T>
 void tForwardList<T>::remove(const T & val)
 {
-	do {
-		if (head->data == val)
-		{
-			Node * temp = head;
-			head = head->next;
-			delete temp;
-		}
-	} while (head->data == val);
-
-	Node *temp = head->next;
-	Node *hold = head;
-	while (temp != NULL)
+	if (head != NULL)
 	{
-		if (temp->data == val)
+		do {
+			if (head->data == val)
+			{
+				Node * temp = head;
+				head = head->next;
+				delete temp;
+			}
+		} while (head->data == val);
+
+		Node *temp = head->next;
+		Node *hold = head;
+		while (temp != NULL)
 		{
-			hold->next = temp->next;
-			temp = hold->next;
-		}
-		else
-		{
-			hold = hold->next;
-			hold = temp;
-			temp = temp->next;
+			if (temp->data == val)
+			{
+				hold->next = temp->next;
+				temp = hold->next;
+			}
+			else
+			{
+				hold = hold->next;
+				hold = temp;
+				temp = temp->next;
+			}
 		}
 	}
 }
@@ -121,4 +149,64 @@ void tForwardList<T>::display()
 		temp = temp->next;
 	}
 	delete temp;
+}
+
+
+template<typename T>
+typename tForwardList<T>::iterator tForwardList<T>::begin()
+{
+	return head;
+}
+
+template<typename T>
+typename tForwardList<T>::iterator tForwardList<T>::end()
+{
+	return iterator(nullptr);
+}
+
+template<typename T>
+tForwardList<T>::iterator::iterator()
+{
+	curr = NULL;
+}
+
+template<typename T>
+tForwardList<T>::iterator::iterator(Node * startNode)
+{
+	cur = startNode;
+}
+
+template<typename T>
+bool tForwardList<T>::iterator::operator==(const iterator & rhs) const
+{
+	return cur == rhs.cur;
+}
+
+template<typename T>
+bool tForwardList<T>::iterator::operator!=(const iterator & rhs) const
+{
+	return !(*this == rhs);
+}
+
+template<typename T>
+T & tForwardList<T>::iterator::operator*() const
+{
+	return cur->data;
+}
+
+template<typename T>
+typename tForwardList<T>::iterator & tForwardList<T>::iterator::operator++()
+{
+	//increment
+	cur = cur->next;
+	//return
+	return *this;
+}
+
+template<typename T>
+typename tForwardList<T>::iterator tForwardList<T>::iterator::operator++(int)
+{
+	iterator temp = cur;
+	cur = cur->next;
+	return temp;
 }

@@ -46,15 +46,15 @@ int main()
 	link.push_front(8);
 	link.push_front(8);
 	link.push_front(9);
-	link.push_front(8);
-	link.push_front(9);
-	link.push_front(9);
-	link.push_front(8);
-	link.push_front(5);
-	link.push_front(8);
 
-	link.remove(8);
+	link.remove(7);
 	link.display();
+
+	std::cout << "dff" << std::endl;
+	for (auto it = link.begin(); it != link.end(); ++it)
+	{
+		std::cout << (*it) << std::endl;
+	}
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
